@@ -1,0 +1,31 @@
+{
+    "tweets": [
+        {
+            "link": "https://twitter.com/example/status/123456789",
+            "text": "This is an example tweet!",
+            "user": {
+                "name": "Example User",
+                "username": "@exampleuser",
+                "profile_id": "1234567890",
+                "avatar": "https://example.com/avatar.jpg"
+            },
+            "date": "Aug 30, 2024 · 8:28 PM UTC",
+            "is-retweet": false,
+            "is-pinned": false,
+            "external-link": "",
+            "replying-to": [],
+            "quoted-post": {},
+            "stats": {
+                "comments": 10,
+                "retweets": 20,
+                "quotes": 5,
+                "likes": 100
+            },
+            "pictures": [
+                "https://example.com/image.jpg"
+            ],
+            "videos": [],
+            "gifs": []
+        }
+    ]
+}

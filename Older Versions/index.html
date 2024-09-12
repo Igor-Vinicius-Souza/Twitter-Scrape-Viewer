@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweet Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .tweet-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 600px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .avatar {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        .name {
+            font-weight: bold;
+        }
+        .username {
+            color: #555;
+        }
+        .tweet-content {
+            margin-top: 10px;
+        }
+        .tweet-stats {
+            margin-top: 15px;
+            color: #555;
+            font-size: 14px;
+        }
+        .tweet-stats span {
+            margin-right: 15px;
+        }
+        .tweet-pictures img {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tweet Viewer</h1>
+    <input type="file" id="fileInput" accept=".json">
+    <div id="tweetsContainer"></div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return; // No file selected
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    // Adjust for the structure in your JSON file
+                    const tweets = data.tweets;
+                    displayTweets(tweets);
+                } catch (error) {
+                    alert('Invalid JSON file!');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function displayTweets(tweets) {
+            const container = document.getElementById('tweetsContainer');
+            container.innerHTML = ''; // Clear previous tweets
+
+            tweets.forEach(tweet => {
+                const tweetCard = document.createElement('div');
+                tweetCard.className = 'tweet-card';
+                
+                let picturesHtml = '';
+                if (tweet.pictures && tweet.pictures.length > 0) {
+                    picturesHtml = tweet.pictures.map(picture => `<img src="${picture}" alt="Tweet image">`).join('');
+                }
+
+                tweetCard.innerHTML = `
+                    <div class="user-info">
+                        <img class="avatar" src="${tweet.user.avatar}" alt="${tweet.user.name}'s avatar">
+                        <div>
+                            <div class="name">${tweet.user.name}</div>
+                            <div class="username">${tweet.user.username}</div>
+                            <div class="date">${tweet.date}</div>
+                        </div>
+                    </div>
+                    <div class="tweet-content">
+                        <p>${tweet.text}</p>
+                    </div>
+                    <div class="tweet-pictures">
+                        ${picturesHtml}
+                    </div>
+                    <div class="tweet-stats">
+                        <span>Comments: ${tweet.stats.comments}</span>
+                        <span>Retweets: ${tweet.stats.retweets}</span>
+                        <span>Quotes: ${tweet.stats.quotes}</span>
+                        <span>Likes: ${tweet.stats.likes}</span>
+                    </div>
+                `;
+                
+                container.appendChild(tweetCard);
+            });
+        }
+    </script>
+</body>
+</html>
