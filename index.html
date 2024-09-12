@@ -1,0 +1,157 @@
+<!--Tweet Viewer-->
+<!--Author: Igor Vinícius Gonçalves de Souza-->
+<!--MIT License-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweet Viewer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #1da1f2;
+            margin-bottom: 20px;
+        }
+        #fileInput {
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .tweet-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .tweet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .avatar {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border: 2px solid #1da1f2;
+        }
+        .name {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+        .username {
+            color: #666;
+            font-size: 14px;
+        }
+        .date {
+            font-size: 12px;
+            color: #999;
+        }
+        .tweet-content {
+            margin-top: 10px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .tweet-stats {
+            margin-top: 15px;
+            color: #555;
+            font-size: 14px;
+            display: flex;
+            gap: 15px;
+        }
+        .tweet-pictures img {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Tweet Viewer</h1>
+    <input type="file" id="fileInput" accept=".json">
+    <div id="tweetsContainer"></div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    const tweets = data.tweets;
+                    displayTweets(tweets);
+                } catch (error) {
+                    alert('Invalid JSON file!');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function displayTweets(tweets) {
+            const container = document.getElementById('tweetsContainer');
+            container.innerHTML = '';
+
+            tweets.forEach(tweet => {
+                const tweetCard = document.createElement('div');
+                tweetCard.className = 'tweet-card';
+                
+                let picturesHtml = '';
+                if (tweet.pictures && tweet.pictures.length > 0) {
+                    picturesHtml = tweet.pictures.map(picture => `<img src="${picture}" alt="Tweet image">`).join('');
+                }
+
+                tweetCard.innerHTML = `
+                    <div class="user-info">
+                        <img class="avatar" src="${tweet.user.avatar}" alt="${tweet.user.name}'s avatar">
+                        <div>
+                            <div class="name">${tweet.user.name}</div>
+                            <div class="username">${tweet.user.username}</div>
+                            <div class="date">${tweet.date}</div>
+                        </div>
+                    </div>
+                    <div class="tweet-content">
+                        <p>${tweet.text || 'No text content available.'}</p>
+                    </div>
+                    <div class="tweet-pictures">
+                        ${picturesHtml}
+                    </div>
+                    <div class="tweet-stats">
+                        <span>💬 ${tweet.stats.comments}</span>
+                        <span>🔁 ${tweet.stats.retweets}</span>
+                        <span>🔖 ${tweet.stats.quotes}</span>
+                        <span>❤️ ${tweet.stats.likes}</span>
+                    </div>
+                `;
+                
+                container.appendChild(tweetCard);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -60,14 +60,15 @@ Tweet Viewer is a simple web-based application that allows users to upload a JSO
         ]
     }
 ```
-
+<br></br>
+- **(You can get those JSON files using the python [ntscraper](https://github.com/bocchilorenzo/ntscraper) library and [Nitter](https://github.com/zedeus/nitter))**
+<br></br>
 4.    **View the Tweets**:
 - The tweets will be displayed on the page with their associated details (like text, user info, stats, and images).
 
 ## Project Structure
 
 - **index.html**: The main HTML file containing the structure and JavaScript for loading and displaying tweets.
-- **styles.css**: (Optional) A separate CSS file can be created for custom styling if desired.
 - **README.md**: Documentation for the project.
 
 ## Dependencies
@@ -86,7 +87,7 @@ If you have suggestions for improvement or new features, feel free to submit a p
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is open source and available under the [MIT License](/LICENSE).
 
 ## Contact
 
